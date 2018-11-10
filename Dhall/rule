@@ -1,0 +1,33 @@
+    let C = constructors ./Const
+
+in  let E = constructors ./../../dhall-bhat/Either/Type Text ./Const
+
+in    λ(a : ./Const)
+    → λ(b : ./Const)
+    → merge
+      { TypeC =
+          λ(_ : {}) → E.Right (C.TypeC {})
+      , KindC =
+            λ(_ : {})
+          → merge
+            { TypeC =
+                E.Left "No dependent types."
+            , KindC =
+                E.Right (C.KindC {})
+            , SortC =
+                E.Right (C.SortC {})
+            }
+            a
+      , SortC =
+            λ(_ : {})
+          → merge
+            { TypeC =
+                E.Left "No dependent types."
+            , KindC =
+                E.Left "No dependent types."
+            , SortC =
+                E.Right (C.SortC {})
+            }
+            a
+      }
+      b

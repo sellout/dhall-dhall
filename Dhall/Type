@@ -1,14 +1,21 @@
 {- The Dhall AST.
 
    Differences from Haskell:
- - no `Note` node (use `EnvT` instead)
- - `OptionalLit` uses `Either` instead of always needing a type
- - no `Some` or `None` nodes (these map to `OptionalLit`)
- - `Map` and `Set` are replaced by `List`, which maintains order, but not
+-  no `Note` node (use `EnvT` instead)
+- `Optional/Lit` and `List/Lit` use `Either` instead of always needing a type
+-  no `Some` or `None` nodes (these map to `Optional/Lit`)
+- `Map` and `Set` are replaced by `List`, which maintains order, but not
    uniqueness.
+
+  `Embed` could also be extracted into its own type, but it’s probably
+   unnecessary, since `./Type <>` will probably be enough to avoid `Embed`
+   introducing any error cases.
 -}
     let Either =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/a49f366e6f0e5815ee118b73b93685e5fa0ef1fa/Either/Type
+          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Either/Type
+
+in  let NonEmptyList =
+          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/NonEmptyList/Type
 
 in    λ(embed : Type)
     → λ(a : Type)
@@ -30,19 +37,19 @@ in    λ(embed : Type)
           {}
       | Bool/Lit :
           Bool
-      | Bool/and :
+      | BoolAnd :
           { _1 : a, _2 : a }
-      | Bool/or :
+      | BoolOr :
           { _1 : a, _2 : a }
-      | Bool/eq :
+      | BoolEq :
           { _1 : a, _2 : a }
-      | Bool/ne :
+      | BoolNe :
           { _1 : a, _2 : a }
-      | Bool/if :
+      | BoolIf :
           { condition : a, consequent : a, alternative : a }
-      | NaturalType :
+      | Natural/Type :
           {}
-      | NaturalLit :
+      | Natural/Lit :
           Natural
       | NaturalFold :
           {}
@@ -62,32 +69,32 @@ in    λ(embed : Type)
           { _1 : a, _2 : a }
       | NaturalTimes :
           { _1 : a, _2 : a }
-      | IntegerType :
+      | Integer/Type :
           {}
-      | IntegerLit :
+      | Integer/Lit :
           Integer
       | IntegerShow :
           {}
       | IntegerToDouble :
           {}
-      | DoubleType :
+      | Double/Type :
           {}
-      | DoubleLit :
+      | Double/Lit :
           Double
       | DoubleShow :
           {}
-      | TextType :
+      | Text/Type :
           {}
-      | TextLit :
+      | Text/Lit :
           Text
       | TextAppend :
-          { first : a, second : a }
-      | ListType :
+          { _1 : a, _2 : a }
+      | List/Type :
           {}
-      | ListLit :
-          { type : Optional a, elems : List a }
+      | List/Lit :
+          Either a (NonEmptyList a)
       | ListAppend :
-          { first : a, second : a }
+          { _1 : a, _2 : a }
       | ListBuild :
           {}
       | ListFold :
@@ -100,28 +107,28 @@ in    λ(embed : Type)
           {}
       | ListReverse :
           {}
-      | OptionalType :
+      | Optional/Type :
           {}
-      | OptionalLit :
-          ./Either a a
+      | Optional/Lit :
+          Either a a
       | OptionalFold :
           {}
       | OptionalBuild :
           {}
-      | RecordType :
+      | Record/Type :
           List { name : Text, type : a }
-      | RecordLit :
+      | Record/Lit :
           List { name : Text, value : a }
-      | Union :
+      | Union/Type :
           List { name : Text, type : a }
-      | UnionLit :
-          { value : a, type : List { name : Text, type : a } }
+      | Union/Lit :
+          { name : Text, value : a, type : List { name : Text, type : a } }
       | Combine :
           { _1 : a, _2 : a }
       | CombineTypes :
           { _1 : a, _2 : a }
       | Prefer :
-          { original : a, preferred : a }
+          { _1 : a, _2 : a }
       | Merge :
           { handlers : a, union : a, type : Optional a }
       | Constructors :

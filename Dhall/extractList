@@ -1,0 +1,159 @@
+    let Steppable =
+          ./../../dada/Steppable/Type Type ./../../dhall-bhat/Function/Type
+
+in  let Either =
+          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Either/Type
+
+in  let NonEmptyList =
+          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/NonEmptyList/Type
+
+in    λ(t : Type)
+    → λ(a : Type)
+    → λ(steppable : Steppable t (./Type a))
+    → λ(expr : t)
+    → merge
+      { Const =
+          λ(_ : ./Const) → None (Either t (NonEmptyList t))
+      , Var =
+          λ(_ : ./Var) → None (Either t (NonEmptyList t))
+      , Lam =
+            λ(_ : { name : Text, input : t, output : t })
+          → None (Either t (NonEmptyList t))
+      , Pi =
+            λ(_ : { name : Text, input : t, output : t })
+          → None (Either t (NonEmptyList t))
+      , App =
+            λ(_ : { function : t, argument : t })
+          → None (Either t (NonEmptyList t))
+      , Let =
+            λ(_ : { name : Text, type : Optional t, binding : t, body : t })
+          → None (Either t (NonEmptyList t))
+      , Annot =
+          λ(_ : { term : t, type : t }) → None (Either t (NonEmptyList t))
+      , Bool/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Bool/Lit =
+          λ(_ : Bool) → None (Either t (NonEmptyList t))
+      , BoolAnd =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , BoolOr =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , BoolEq =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , BoolNe =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , BoolIf =
+            λ(_ : { condition : t, consequent : t, alternative : t })
+          → None (Either t (NonEmptyList t))
+      , Natural/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Natural/Lit =
+          λ(_ : Natural) → None (Either t (NonEmptyList t))
+      , NaturalFold =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalBuild =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalIsZero =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalEven =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalOdd =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalToInteger =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalShow =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , NaturalPlus =
+          λ(args : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , NaturalTimes =
+          λ(args : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , Integer/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Integer/Lit =
+          λ(_ : Integer) → None (Either t (NonEmptyList t))
+      , IntegerShow =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , IntegerToDouble =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Double/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Double/Lit =
+          λ(_ : Double) → None (Either t (NonEmptyList t))
+      , DoubleShow =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Text/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Text/Lit =
+          λ(_ : Text) → None (Either t (NonEmptyList t))
+      , TextAppend =
+          λ(args : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , List/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , List/Lit =
+          λ(list : Either t (NonEmptyList t)) → Some list
+      , ListAppend =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , ListBuild =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , ListFold =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , ListLength =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , ListHead =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , ListLast =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , ListReverse =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Optional/Type =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Optional/Lit =
+          λ(_ : Either t t) → None (Either t (NonEmptyList t))
+      , OptionalFold =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , OptionalBuild =
+          λ(_ : {}) → None (Either t (NonEmptyList t))
+      , Record/Type =
+            λ(_ : List { name : Text, type : t })
+          → None (Either t (NonEmptyList t))
+      , Record/Lit =
+            λ(_ : List { name : Text, value : t })
+          → None (Either t (NonEmptyList t))
+      , Union/Type =
+            λ(_ : List { name : Text, type : t })
+          → None (Either t (NonEmptyList t))
+      , Union/Lit =
+            λ ( _
+              : { name :
+                    Text
+                , value :
+                    t
+                , type :
+                    List { name : Text, type : t }
+                }
+              )
+          → None (Either t (NonEmptyList t))
+      , Combine =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , CombineTypes =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , Prefer =
+          λ(_ : { _1 : t, _2 : t }) → None (Either t (NonEmptyList t))
+      , Merge =
+            λ(_ : { handlers : t, union : t, type : Optional t })
+          → None (Either t (NonEmptyList t))
+      , Constructors =
+          λ(_ : t) → None (Either t (NonEmptyList t))
+      , Field =
+            λ(_ : { structure : t, name : Text })
+          → None (Either t (NonEmptyList t))
+      , Project =
+            λ(_ : { structure : t, names : List Text })
+          → None (Either t (NonEmptyList t))
+      , ImportAlt =
+            λ(_ : { primary : t, fallback : t })
+          → None (Either t (NonEmptyList t))
+      , Embed =
+          λ(_ : a) → None (Either t (NonEmptyList t))
+      }
+      (steppable.project expr)

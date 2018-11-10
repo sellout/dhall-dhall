@@ -1,0 +1,14 @@
+    let C = constructors ./Const
+
+in  let E = constructors ./../../dhall-bhat/Either/Type Text ./Const
+
+in    λ(const : ./Const)
+    → merge
+      { TypeC =
+          λ(_ : {}) → E.Right (C.KindC {})
+      , KindC =
+          λ(_ : {}) → E.Right (C.SortC {})
+      , SortC =
+          λ(_ : {}) → E.Left "Sort has no type."
+      }
+      const
