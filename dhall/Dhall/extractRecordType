@@ -1,159 +1,127 @@
-    let Steppable =
-          ./../../dada/Steppable/Type Type ./../../dhall-bhat/Function/Type
+let B =
+      https://sellout.github.io/dhall-bhat/package.dhall
+        sha256:67617847fca913d17863ad857224cd9b3904297bb15a9674146d5e120c5ff08a
 
-in  let Either =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Either/Type
+let D =
+      https://sellout.github.io/dada/package.dhall
+        sha256:bb4dc73fa86a3b05014e4c91aff598b81535ea54efc8692151af5f68667c78d9
 
-in  let NonEmptyList =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/NonEmptyList/Type
+let Steppable = D.Steppable.Type
 
-in    λ(t : Type)
-    → λ(a : Type)
-    → λ(steppable : Steppable t (./Type a))
-    → λ(expr : t)
-    → merge
-      { Const =
-          λ(_ : ./Const) → None (List { name : Text, type : t })
-      , Var =
-          λ(_ : ./Var) → None (List { name : Text, type : t })
-      , Lam =
-            λ(_ : { name : Text, input : t, output : t })
-          → None (List { name : Text, type : t })
-      , Pi =
-            λ(_ : { name : Text, input : t, output : t })
-          → None (List { name : Text, type : t })
-      , App =
-            λ(_ : { function : t, argument : t })
-          → None (List { name : Text, type : t })
-      , Let =
-            λ(_ : { name : Text, type : Optional t, binding : t, body : t })
-          → None (List { name : Text, type : t })
-      , Annot =
-          λ(_ : { term : t, type : t }) → None (List { name : Text, type : t })
-      , Bool/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Bool/Lit =
-          λ(_ : Bool) → None (List { name : Text, type : t })
-      , BoolAnd =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , BoolOr =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , BoolEq =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , BoolNe =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , BoolIf =
-            λ(_ : { condition : t, consequent : t, alternative : t })
-          → None (List { name : Text, type : t })
-      , Natural/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Natural/Lit =
-          λ(_ : Natural) → None (List { name : Text, type : t })
-      , NaturalFold =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalBuild =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalIsZero =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalEven =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalOdd =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalToInteger =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalShow =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , NaturalPlus =
-          λ(args : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , NaturalTimes =
-          λ(args : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , Integer/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Integer/Lit =
-          λ(_ : Integer) → None (List { name : Text, type : t })
-      , IntegerShow =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , IntegerToDouble =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Double/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Double/Lit =
-          λ(_ : Double) → None (List { name : Text, type : t })
-      , DoubleShow =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Text/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Text/Lit =
-          λ(_ : Text) → None (List { name : Text, type : t })
-      , TextAppend =
-          λ(args : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , List/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , List/Lit =
-            λ(_ : Either t (NonEmptyList t))
-          → None (List { name : Text, type : t })
-      , ListAppend =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , ListBuild =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , ListFold =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , ListLength =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , ListHead =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , ListLast =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , ListReverse =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Optional/Type =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Optional/Lit =
-          λ(_ : Either t t) → None (List { name : Text, type : t })
-      , OptionalFold =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , OptionalBuild =
-          λ(_ : {}) → None (List { name : Text, type : t })
-      , Record/Type =
-          λ(rec : List { name : Text, type : t }) → Some rec
-      , Record/Lit =
-            λ(_ : List { name : Text, value : t })
-          → None (List { name : Text, type : t })
-      , Union/Type =
-            λ(_ : List { name : Text, type : t })
-          → None (List { name : Text, type : t })
-      , Union/Lit =
+let Either = B.Either.Type
+
+let NonEmptyList = B.NonEmptyList.Type
+
+in  λ(t : Type) →
+    λ(a : Type) →
+    λ(steppable : Steppable t (./Type a)) →
+    λ(expr : t) →
+      merge
+        { Const = λ(_ : ./Const) → None (List { name : Text, type : t })
+        , Var = λ(_ : ./Var) → None (List { name : Text, type : t })
+        , Lam =
+            λ(_ : { name : Text, input : t, output : t }) →
+              None (List { name : Text, type : t })
+        , Pi =
+            λ(_ : { name : Text, input : t, output : t }) →
+              None (List { name : Text, type : t })
+        , App =
+            λ(_ : { function : t, argument : t }) →
+              None (List { name : Text, type : t })
+        , Let =
+            λ(_ : { name : Text, type : Optional t, binding : t, body : t }) →
+              None (List { name : Text, type : t })
+        , Annot =
+            λ(_ : { term : t, type : t }) →
+              None (List { name : Text, type : t })
+        , Bool/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , Bool/Lit = λ(_ : Bool) → None (List { name : Text, type : t })
+        , BoolAnd =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , BoolOr =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , BoolEq =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , BoolNe =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , BoolIf =
+            λ(_ : { condition : t, consequent : t, alternative : t }) →
+              None (List { name : Text, type : t })
+        , Natural/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , Natural/Lit = λ(_ : Natural) → None (List { name : Text, type : t })
+        , NaturalFold = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalBuild = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalIsZero = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalEven = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalOdd = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalToInteger = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalShow = λ(_ : {}) → None (List { name : Text, type : t })
+        , NaturalPlus =
+            λ(args : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , NaturalTimes =
+            λ(args : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , Integer/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , Integer/Lit = λ(_ : Integer) → None (List { name : Text, type : t })
+        , IntegerShow = λ(_ : {}) → None (List { name : Text, type : t })
+        , IntegerToDouble = λ(_ : {}) → None (List { name : Text, type : t })
+        , Double/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , Double/Lit = λ(_ : Double) → None (List { name : Text, type : t })
+        , DoubleShow = λ(_ : {}) → None (List { name : Text, type : t })
+        , Text/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , Text/Lit = λ(_ : Text) → None (List { name : Text, type : t })
+        , TextAppend =
+            λ(args : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , List/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , List/Lit =
+            λ(_ : Either t (NonEmptyList t)) →
+              None (List { name : Text, type : t })
+        , ListAppend =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , ListBuild = λ(_ : {}) → None (List { name : Text, type : t })
+        , ListFold = λ(_ : {}) → None (List { name : Text, type : t })
+        , ListLength = λ(_ : {}) → None (List { name : Text, type : t })
+        , ListHead = λ(_ : {}) → None (List { name : Text, type : t })
+        , ListLast = λ(_ : {}) → None (List { name : Text, type : t })
+        , ListReverse = λ(_ : {}) → None (List { name : Text, type : t })
+        , Optional/Type = λ(_ : {}) → None (List { name : Text, type : t })
+        , Optional/Lit =
+            λ(_ : Either t t) → None (List { name : Text, type : t })
+        , OptionalFold = λ(_ : {}) → None (List { name : Text, type : t })
+        , OptionalBuild = λ(_ : {}) → None (List { name : Text, type : t })
+        , Record/Type = λ(rec : List { name : Text, type : t }) → Some rec
+        , Record/Lit =
+            λ(_ : List { name : Text, value : t }) →
+              None (List { name : Text, type : t })
+        , Union/Type =
+            λ(_ : List { name : Text, type : t }) →
+              None (List { name : Text, type : t })
+        , Union/Lit =
             λ ( _
-              : { name :
-                    Text
-                , value :
-                    t
-                , type :
-                    List { name : Text, type : t }
+              : { name : Text
+                , value : t
+                , type : List { name : Text, type : t }
                 }
-              )
-          → None (List { name : Text, type : t })
-      , Combine =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , CombineTypes =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , Prefer =
-          λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
-      , Merge =
-            λ(_ : { handlers : t, union : t, type : Optional t })
-          → None (List { name : Text, type : t })
-      , Constructors =
-          λ(_ : t) → None (List { name : Text, type : t })
-      , Field =
-            λ(_ : { structure : t, name : Text })
-          → None (List { name : Text, type : t })
-      , Project =
-            λ(_ : { structure : t, names : List Text })
-          → None (List { name : Text, type : t })
-      , ImportAlt =
-            λ(_ : { primary : t, fallback : t })
-          → None (List { name : Text, type : t })
-      , Embed =
-          λ(_ : a) → None (List { name : Text, type : t })
-      }
-      (steppable.project expr)
+              ) →
+              None (List { name : Text, type : t })
+        , Combine =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , CombineTypes =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , Prefer =
+            λ(_ : { _1 : t, _2 : t }) → None (List { name : Text, type : t })
+        , Merge =
+            λ(_ : { handlers : t, union : t, type : Optional t }) →
+              None (List { name : Text, type : t })
+        , Constructors = λ(_ : t) → None (List { name : Text, type : t })
+        , Field =
+            λ(_ : { structure : t, name : Text }) →
+              None (List { name : Text, type : t })
+        , Project =
+            λ(_ : { structure : t, names : List Text }) →
+              None (List { name : Text, type : t })
+        , ImportAlt =
+            λ(_ : { primary : t, fallback : t }) →
+              None (List { name : Text, type : t })
+        , Embed = λ(_ : a) → None (List { name : Text, type : t })
+        }
+        (steppable.project expr)

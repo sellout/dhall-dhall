@@ -11,134 +11,76 @@
    unnecessary, since `./Type <>` will probably be enough to avoid `Embed`
    introducing any error cases.
 -}
-    let Either =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Either/Type
+let B =
+      https://sellout.github.io/dhall-bhat/package.dhall
+        sha256:67617847fca913d17863ad857224cd9b3904297bb15a9674146d5e120c5ff08a
 
-in  let NonEmptyList =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/NonEmptyList/Type
+let Either = B.Either.Type
 
-in    λ(embed : Type)
-    → λ(a : Type)
-    → < Const :
-          ./Const
-      | Var :
-          ./Var
-      | Lam :
-          { name : Text, input : a, output : a }
-      | Pi :
-          { name : Text, input : a, output : a }
-      | App :
-          { function : a, argument : a }
-      | Let :
-          { name : Text, type : Optional a, binding : a, body : a }
-      | Annot :
-          { term : a, type : a }
-      | Bool/Type :
-          {}
-      | Bool/Lit :
-          Bool
-      | BoolAnd :
-          { _1 : a, _2 : a }
-      | BoolOr :
-          { _1 : a, _2 : a }
-      | BoolEq :
-          { _1 : a, _2 : a }
-      | BoolNe :
-          { _1 : a, _2 : a }
-      | BoolIf :
-          { condition : a, consequent : a, alternative : a }
-      | Natural/Type :
-          {}
-      | Natural/Lit :
-          Natural
-      | NaturalFold :
-          {}
-      | NaturalBuild :
-          {}
-      | NaturalIsZero :
-          {}
-      | NaturalEven :
-          {}
-      | NaturalOdd :
-          {}
-      | NaturalToInteger :
-          {}
-      | NaturalShow :
-          {}
-      | NaturalPlus :
-          { _1 : a, _2 : a }
-      | NaturalTimes :
-          { _1 : a, _2 : a }
-      | Integer/Type :
-          {}
-      | Integer/Lit :
-          Integer
-      | IntegerShow :
-          {}
-      | IntegerToDouble :
-          {}
-      | Double/Type :
-          {}
-      | Double/Lit :
-          Double
-      | DoubleShow :
-          {}
-      | Text/Type :
-          {}
-      | Text/Lit :
-          Text
-      | TextAppend :
-          { _1 : a, _2 : a }
-      | List/Type :
-          {}
-      | List/Lit :
-          Either a (NonEmptyList a)
-      | ListAppend :
-          { _1 : a, _2 : a }
-      | ListBuild :
-          {}
-      | ListFold :
-          {}
-      | ListLength :
-          {}
-      | ListHead :
-          {}
-      | ListLast :
-          {}
-      | ListReverse :
-          {}
-      | Optional/Type :
-          {}
-      | Optional/Lit :
-          Either a a
-      | OptionalFold :
-          {}
-      | OptionalBuild :
-          {}
-      | Record/Type :
-          List { name : Text, type : a }
-      | Record/Lit :
-          List { name : Text, value : a }
-      | Union/Type :
-          List { name : Text, type : a }
+let NonEmptyList = B.NonEmptyList.Type
+
+in  λ(embed : Type) →
+    λ(a : Type) →
+      < Const : ./Const
+      | Var : ./Var
+      | Lam : { name : Text, input : a, output : a }
+      | Pi : { name : Text, input : a, output : a }
+      | App : { function : a, argument : a }
+      | Let : { name : Text, type : Optional a, binding : a, body : a }
+      | Annot : { term : a, type : a }
+      | Bool/Type : {}
+      | Bool/Lit : Bool
+      | BoolAnd : { _1 : a, _2 : a }
+      | BoolOr : { _1 : a, _2 : a }
+      | BoolEq : { _1 : a, _2 : a }
+      | BoolNe : { _1 : a, _2 : a }
+      | BoolIf : { condition : a, consequent : a, alternative : a }
+      | Natural/Type : {}
+      | Natural/Lit : Natural
+      | NaturalFold : {}
+      | NaturalBuild : {}
+      | NaturalIsZero : {}
+      | NaturalEven : {}
+      | NaturalOdd : {}
+      | NaturalToInteger : {}
+      | NaturalShow : {}
+      | NaturalPlus : { _1 : a, _2 : a }
+      | NaturalTimes : { _1 : a, _2 : a }
+      | Integer/Type : {}
+      | Integer/Lit : Integer
+      | IntegerShow : {}
+      | IntegerToDouble : {}
+      | Double/Type : {}
+      | Double/Lit : Double
+      | DoubleShow : {}
+      | Text/Type : {}
+      | Text/Lit : Text
+      | TextAppend : { _1 : a, _2 : a }
+      | List/Type : {}
+      | List/Lit : Either a (NonEmptyList a)
+      | ListAppend : { _1 : a, _2 : a }
+      | ListBuild : {}
+      | ListFold : {}
+      | ListLength : {}
+      | ListHead : {}
+      | ListLast : {}
+      | ListReverse : {}
+      | Optional/Type : {}
+      | Optional/Lit : Either a a
+      | OptionalFold : {}
+      | OptionalBuild : {}
+      | Record/Type : List { name : Text, type : a }
+      | Record/Lit : List { name : Text, value : a }
+      | Union/Type : List { name : Text, type : a }
       | Union/Lit :
           { name : Text, value : a, type : List { name : Text, type : a } }
-      | Combine :
-          { _1 : a, _2 : a }
-      | CombineTypes :
-          { _1 : a, _2 : a }
-      | Prefer :
-          { _1 : a, _2 : a }
-      | Merge :
-          { handlers : a, union : a, type : Optional a }
-      | Constructors :
-          a
-      | Field :
-          { structure : a, name : Text }
-      | Project :
-          { structure : a, names : List Text }
-      | ImportAlt :
-          { primary : a, fallback : a }
-      | Embed :
-          embed
+      | Combine : { _1 : a, _2 : a }
+      | CombineTypes : { _1 : a, _2 : a }
+      | Prefer : { _1 : a, _2 : a }
+      | Merge : { handlers : a, union : a, type : Optional a }
+      | Constructors : a
+      | Field : { structure : a, name : Text }
+      | Project : { structure : a, names : List Text }
+      | ImportAlt : { primary : a, fallback : a }
+      | Embed : embed
       >

@@ -1,1 +1,1 @@
-{ name: Text, index: Natural }
+{ name : Text, index : Natural }

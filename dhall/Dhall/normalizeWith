@@ -4,383 +4,333 @@
 - `App`, `Let`, and `Merge` need actual implementations.
 - `Field` and `Project` need text comparisons.
 -}
-    let Steppable =
-          ./../../dada/Steppable/Type Type ./../../dhall-bhat/Function/Type
+let B =
+      https://sellout.github.io/dhall-bhat/package.dhall
+        sha256:67617847fca913d17863ad857224cd9b3904297bb15a9674146d5e120c5ff08a
 
-in  let Either =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Either/Type
+let C =
+      https://sellout.github.io/caterwaul/package.dhall
+        sha256:00a6fbc05462b46d1bd69045f97d4ac3fb722efac3289e409bfb5d4fcf8ad056
 
-in  let NonEmptyList =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/NonEmptyList/Type
+let D =
+      https://sellout.github.io/dada/package.dhall
+        sha256:bb4dc73fa86a3b05014e4c91aff598b81535ea54efc8692151af5f68667c78d9
 
-in  let List/map =
-          https://raw.githubusercontent.com/dhall-lang/dhall-lang/0a7f596d03b3ea760a96a8e03935f4baa64274e1/Prelude/List/map
+let P =
+      https://prelude.dhall-lang.org/v20.1.0/package.dhall
+        sha256:26b0ef498663d269e4dc6a82b0ee289ec565d683ef4c00d0ebdd25333a5a3c98
 
-in  let Optional/map2 =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Applicative/liftA2
-          Optional
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Optional/applicative
+let Steppable = D.Steppable.Type
 
-in  let eq = ./../../dhall-bhat/Optional/eq Bool ./../../dhall-bhat/Bool/eq
+let Either = B.Either.Type
 
-in    λ(t : Type)
-    → λ(a : Type)
-    → λ(steppable : Steppable t (./Type a))
-    →     let E = constructors (./Type a t)
-      
-      in  let Et = constructors (Either t (NonEmptyList t))
-      
-      in  let Normalizer = λ(a : Type) → ./Type a t → Optional t
-      
-      in  let NOP =
-                  λ(b : Type)
-                → λ(f : b → ./Type a t)
-                → λ(x : b)
-                → steppable.embed (f x)
-      
-      in  let extractBool = ./extractBool t a steppable
-      
-      in  let extractList = ./extractList t a steppable
-      
-      in  let extractNatural = ./extractNatural t a steppable
-      
-      in  let extractRecord = ./extractRecord t a steppable
-      
-      in  let extractRecordType = ./extractRecordType t a steppable
-      
-      in  let extractText = ./extractText t a steppable
-      
-      in  let extractUnionType = ./extractUnionType t a steppable
-      
-      in  let applyOperator =
-                  λ(constructor : { _1 : t, _2 : t } → ./Type a t)
-                → λ(type : Type)
-                → λ(lit : type → ./Type a t)
-                → λ(op : type → type → type)
-                → λ(extract : t → Optional type)
-                → λ(args : { _1 : t, _2 : t })
-                → Optional/fold
-                  type
-                  ( Optional/map2
+let NonEmptyList = B.NonEmptyList.Type
+
+let List/map = P.List.map
+
+let Optional/map2 = B.Applicative.liftA2 Optional B.Optional.applicative
+
+let eq = C.Optional.eq Bool C.Bool.eq
+
+in  λ(t : Type) →
+    λ(a : Type) →
+    λ(steppable : Steppable t (./Type a)) →
+      let E = ./Type a t
+
+      let Et = Either t (NonEmptyList t)
+
+      let Normalizer = λ(a : Type) → ./Type a t → Optional t
+
+      let NOP =
+            λ(b : Type) →
+            λ(f : b → ./Type a t) →
+            λ(x : b) →
+              steppable.embed (f x)
+
+      let extractBool = ./extractBool t a steppable
+
+      let extractList = ./extractList t a steppable
+
+      let extractNatural = ./extractNatural t a steppable
+
+      let extractRecord = ./extractRecord t a steppable
+
+      let extractRecordType = ./extractRecordType t a steppable
+
+      let extractText = ./extractText t a steppable
+
+      let extractUnionType = ./extractUnionType t a steppable
+
+      let applyOperator =
+            λ(constructor : { _1 : t, _2 : t } → ./Type a t) →
+            λ(type : Type) →
+            λ(lit : type → ./Type a t) →
+            λ(op : type → type → type) →
+            λ(extract : t → Optional type) →
+            λ(args : { _1 : t, _2 : t }) →
+              P.Optional.fold
+                type
+                ( Optional/map2
                     type
                     type
                     type
                     op
                     (extract args._1)
                     (extract args._2)
-                  )
-                  t
-                  (λ(res : type) → steppable.embed (lit res))
-                  (NOP { _1 : t, _2 : t } constructor args)
-      
-      in    λ(ctx : Normalizer a)
-          → λ(expr : ./Type a t)
-          → merge
-            { Const =
-                NOP ./Const E.Const
-            , Var =
-                NOP ./Var E.Var
-            , Lam =
-                NOP { name : Text, input : t, output : t } E.Lam
-            , Pi =
-                NOP { name : Text, input : t, output : t } E.Pi
-            , App =
-                NOP { function : t, argument : t } E.App
-            , Let =
-                NOP
-                { name : Text, type : Optional t, binding : t, body : t }
-                E.Let
-            , Annot =
-                λ(annot : { term : t, type : t }) → annot.term
-            , Bool/Type =
-                NOP {} E.Bool/Type
-            , Bool/Lit =
-                NOP Bool E.Bool/Lit
-            , BoolAnd =
-                  λ(args : { _1 : t, _2 : t })
-                →       if eq.eq (extractBool args._1) (Some True)
-                  
-                  then  args._2
-                  
-                  else  if eq.eq (extractBool args._2) (Some True)
-                  
-                  then  args._1
-                  
-                  else  if     eq.eq (extractBool args._1) (Some False)
-                           ||  eq.eq (extractBool args._2) (Some False)
-                  
-                  then  NOP Bool E.Bool/Lit False
-                  
-                  else  NOP { _1 : t, _2 : t } E.BoolAnd args
-            , BoolOr =
-                  λ(args : { _1 : t, _2 : t })
-                →       if eq.eq (extractBool args._1) (Some False)
-                  
-                  then  args._2
-                  
-                  else  if eq.eq (extractBool args._2) (Some False)
-                  
-                  then  args._1
-                  
-                  else  if     eq.eq (extractBool args._1) (Some True)
-                           ||  eq.eq (extractBool args._2) (Some True)
-                  
-                  then  NOP Bool E.Bool/Lit True
-                  
-                  else  NOP { _1 : t, _2 : t } E.BoolOr args
-            , BoolEq =
-                applyOperator
-                E.BoolEq
-                Bool
-                E.Bool/Lit
-                (λ(a : Bool) → λ(b : Bool) → a == b)
-                extractBool
-            , BoolNe =
-                applyOperator
-                E.BoolNe
-                Bool
-                E.Bool/Lit
-                (λ(a : Bool) → λ(b : Bool) → a != b)
-                extractBool
-            , BoolIf =
-                  λ(args : { condition : t, consequent : t, alternative : t })
-                → Optional/fold
-                  Bool
-                  (extractBool args.condition)
-                  t
-                  (   λ(b : Bool)
-                    → if b then args.consequent else args.alternative
-                  )
-                  ( NOP
-                    { condition : t, consequent : t, alternative : t }
-                    E.BoolIf
-                    args
-                  )
-            , Natural/Type =
-                NOP {} E.Natural/Type
-            , Natural/Lit =
-                NOP Natural E.Natural/Lit
-            , NaturalFold =
-                NOP {} E.NaturalFold
-            , NaturalBuild =
-                NOP {} E.NaturalBuild
-            , NaturalIsZero =
-                NOP {} E.NaturalIsZero
-            , NaturalEven =
-                NOP {} E.NaturalEven
-            , NaturalOdd =
-                NOP {} E.NaturalOdd
-            , NaturalToInteger =
-                NOP {} E.NaturalToInteger
-            , NaturalShow =
-                NOP {} E.NaturalShow
-            , NaturalPlus =
-                applyOperator
-                E.NaturalPlus
-                Natural
-                E.Natural/Lit
-                (λ(a : Natural) → λ(b : Natural) → a + b)
-                extractNatural
-            , NaturalTimes =
-                applyOperator
-                E.NaturalTimes
-                Natural
-                E.Natural/Lit
-                (λ(a : Natural) → λ(b : Natural) → a * b)
-                extractNatural
-            , Integer/Type =
-                NOP {} E.Integer/Type
-            , Integer/Lit =
-                NOP Integer E.Integer/Lit
-            , IntegerShow =
-                NOP {} E.IntegerShow
-            , IntegerToDouble =
-                NOP {} E.IntegerToDouble
-            , Double/Type =
-                NOP {} E.Double/Type
-            , Double/Lit =
-                NOP Double E.Double/Lit
-            , DoubleShow =
-                NOP {} E.DoubleShow
-            , Text/Type =
-                NOP {} E.Text/Type
-            , Text/Lit =
-                NOP Text E.Text/Lit
-            , TextAppend =
-                applyOperator
-                E.TextAppend
-                Text
-                E.Text/Lit
-                (λ(a : Text) → λ(b : Text) → a ++ b)
-                extractText
-            , List/Type =
-                NOP {} E.List/Type
-            , List/Lit =
-                NOP (Either t (NonEmptyList t)) E.List/Lit
-            , ListAppend =
-                applyOperator
-                E.ListAppend
-                (Either t (NonEmptyList t))
-                E.List/Lit
-                (   λ(a : Either t (NonEmptyList t))
-                  → λ(b : Either t (NonEmptyList t))
-                  → merge
-                    { Left =
-                        λ(_ : t) → b
-                    , Right =
-                          λ(x : NonEmptyList t)
-                        → Et.Right
-                          ( merge
-                            { Left =
-                                λ(_ : t) → x
-                            , Right =
-                                  λ(y : NonEmptyList t)
-                                → { head =
-                                      x.head
-                                  , tail =
-                                      x.tail # [ y.head ] # y.tail
-                                  }
-                            }
-                            b
-                          )
-                    }
-                    a
                 )
-                extractList
-            , ListBuild =
-                NOP {} E.ListBuild
-            , ListFold =
-                NOP {} E.ListFold
-            , ListLength =
-                NOP {} E.ListLength
-            , ListHead =
-                NOP {} E.ListHead
-            , ListLast =
-                NOP {} E.ListLast
-            , ListReverse =
-                NOP {} E.ListReverse
-            , Optional/Type =
-                NOP {} E.Optional/Type
-            , Optional/Lit =
-                NOP (Either t t) E.Optional/Lit
-            , OptionalFold =
-                NOP {} E.OptionalFold
-            , OptionalBuild =
-                NOP {} E.OptionalBuild
-            , Record/Type =
-                NOP (List { name : Text, type : t }) E.Record/Type
-            , Record/Lit =
-                NOP (List { name : Text, value : t }) E.Record/Lit
-            , Union/Type =
-                NOP (List { name : Text, type : t }) E.Union/Type
-            , Union/Lit =
-                NOP
-                { name :
-                    Text
-                , value :
-                    t
-                , type :
-                    List { name : Text, type : t }
-                }
-                E.Union/Lit
-            , Combine =
-                applyOperator
-                E.Combine
-                (List { name : Text, value : t })
-                E.Record/Lit
-                (   λ(a : List { name : Text, value : t })
-                  → λ(b : List { name : Text, value : t })
-                  → a # b
-                )
-                extractRecord
-            , CombineTypes =
-                applyOperator
-                E.CombineTypes
-                (List { name : Text, type : t })
-                E.Record/Type
-                (   λ(a : List { name : Text, type : t })
-                  → λ(b : List { name : Text, type : t })
-                  → a # b
-                )
-                extractRecordType
-            , Prefer =
-                applyOperator
-                E.Prefer
-                (List { name : Text, value : t })
-                E.Record/Lit
-                (   λ(a : List { name : Text, value : t })
-                  → λ(b : List { name : Text, value : t })
-                  → a # b
-                )
-                extractRecord
-            , Merge =
-                NOP { handlers : t, union : t, type : Optional t } E.Merge
-            , Constructors =
-                  λ(args : t)
-                → Optional/fold
-                  (List { name : Text, type : t })
-                  (extractUnionType args)
-                  t
-                  (   λ(list : List { name : Text, type : t })
-                    → steppable.embed
-                      ( E.Record/Lit
-                        ( List/map
-                          { name : Text, type : t }
-                          { name : Text, value : t }
-                          (   λ(entry : { name : Text, type : t })
-                            → { name =
-                                  entry.name
-                              , value =
-                                  steppable.embed
-                                  ( E.Lam
-                                    { name =
-                                        "_"
-                                    , input =
-                                        entry.type
-                                    , output =
-                                        steppable.embed
-                                        ( E.Union/Lit
-                                          { name =
-                                              entry.name
-                                          , value =
-                                              steppable.embed
-                                              (E.Var { name = "_", index = 0 })
-                                          , type =
-                                              list
-                                          }
-                                        )
-                                    }
-                                  )
-                              }
-                          )
-                          list
-                        )
+                t
+                (λ(res : type) → steppable.embed (lit res))
+                (NOP { _1 : t, _2 : t } constructor args)
+
+      in  λ(ctx : Normalizer a) →
+          λ(expr : ./Type a t) →
+            merge
+              { Const = NOP ./Const E.Const
+              , Var = NOP ./Var E.Var
+              , Lam = NOP { name : Text, input : t, output : t } E.Lam
+              , Pi = NOP { name : Text, input : t, output : t } E.Pi
+              , App = NOP { function : t, argument : t } E.App
+              , Let =
+                  NOP
+                    { name : Text, type : Optional t, binding : t, body : t }
+                    E.Let
+              , Annot = λ(annot : { term : t, type : t }) → annot.term
+              , Bool/Type = NOP {} E.Bool/Type
+              , Bool/Lit = NOP Bool E.Bool/Lit
+              , BoolAnd =
+                  λ(args : { _1 : t, _2 : t }) →
+                    if    eq.eq (extractBool args._1) (Some True)
+                    then  args._2
+                    else  if eq.eq (extractBool args._2) (Some True)
+                    then  args._1
+                    else  if     eq.eq (extractBool args._1) (Some False)
+                             ||  eq.eq (extractBool args._2) (Some False)
+                    then  NOP Bool E.Bool/Lit False
+                    else  NOP { _1 : t, _2 : t } E.BoolAnd args
+              , BoolOr =
+                  λ(args : { _1 : t, _2 : t }) →
+                    if    eq.eq (extractBool args._1) (Some False)
+                    then  args._2
+                    else  if eq.eq (extractBool args._2) (Some False)
+                    then  args._1
+                    else  if     eq.eq (extractBool args._1) (Some True)
+                             ||  eq.eq (extractBool args._2) (Some True)
+                    then  NOP Bool E.Bool/Lit True
+                    else  NOP { _1 : t, _2 : t } E.BoolOr args
+              , BoolEq =
+                  applyOperator
+                    E.BoolEq
+                    Bool
+                    E.Bool/Lit
+                    (λ(a : Bool) → λ(b : Bool) → a == b)
+                    extractBool
+              , BoolNe =
+                  applyOperator
+                    E.BoolNe
+                    Bool
+                    E.Bool/Lit
+                    (λ(a : Bool) → λ(b : Bool) → a != b)
+                    extractBool
+              , BoolIf =
+                  λ(args : { condition : t, consequent : t, alternative : t }) →
+                    P.Optional.fold
+                      Bool
+                      (extractBool args.condition)
+                      t
+                      ( λ(b : Bool) →
+                          if b then args.consequent else args.alternative
                       )
-                  )
-                  (NOP t E.Constructors args)
-            , Field =
-                  λ(args : { structure : t, name : Text })
-                → Optional/fold
-                  (List { name : Text, value : t })
-                  (extractRecord args.structure)
-                  t
-                  (   λ(_ : List { name : Text, value : t })
-                    → NOP { structure : t, name : Text } E.Field args
-                  )
-                  (NOP { structure : t, name : Text } E.Field args)
-            , Project =
-                  λ(args : { structure : t, names : List Text })
-                → Optional/fold
-                  (List { name : Text, value : t })
-                  (extractRecord args.structure)
-                  t
-                  (   λ(rec : List { name : Text, value : t })
-                    → NOP (List { name : Text, value : t }) E.Record/Lit rec
-                  )
-                  (NOP { structure : t, names : List Text } E.Project args)
-            , ImportAlt =
-                λ(import : { primary : t, fallback : t }) → import.primary
-            , Embed =
-                NOP a E.Embed
-            }
-            expr
+                      ( NOP
+                          { condition : t, consequent : t, alternative : t }
+                          E.BoolIf
+                          args
+                      )
+              , Natural/Type = NOP {} E.Natural/Type
+              , Natural/Lit = NOP Natural E.Natural/Lit
+              , NaturalFold = NOP {} E.NaturalFold
+              , NaturalBuild = NOP {} E.NaturalBuild
+              , NaturalIsZero = NOP {} E.NaturalIsZero
+              , NaturalEven = NOP {} E.NaturalEven
+              , NaturalOdd = NOP {} E.NaturalOdd
+              , NaturalToInteger = NOP {} E.NaturalToInteger
+              , NaturalShow = NOP {} E.NaturalShow
+              , NaturalPlus =
+                  applyOperator
+                    E.NaturalPlus
+                    Natural
+                    E.Natural/Lit
+                    (λ(a : Natural) → λ(b : Natural) → a + b)
+                    extractNatural
+              , NaturalTimes =
+                  applyOperator
+                    E.NaturalTimes
+                    Natural
+                    E.Natural/Lit
+                    (λ(a : Natural) → λ(b : Natural) → a * b)
+                    extractNatural
+              , Integer/Type = NOP {} E.Integer/Type
+              , Integer/Lit = NOP Integer E.Integer/Lit
+              , IntegerShow = NOP {} E.IntegerShow
+              , IntegerToDouble = NOP {} E.IntegerToDouble
+              , Double/Type = NOP {} E.Double/Type
+              , Double/Lit = NOP Double E.Double/Lit
+              , DoubleShow = NOP {} E.DoubleShow
+              , Text/Type = NOP {} E.Text/Type
+              , Text/Lit = NOP Text E.Text/Lit
+              , TextAppend =
+                  applyOperator
+                    E.TextAppend
+                    Text
+                    E.Text/Lit
+                    (λ(a : Text) → λ(b : Text) → a ++ b)
+                    extractText
+              , List/Type = NOP {} E.List/Type
+              , List/Lit = NOP (Either t (NonEmptyList t)) E.List/Lit
+              , ListAppend =
+                  applyOperator
+                    E.ListAppend
+                    (Either t (NonEmptyList t))
+                    E.List/Lit
+                    ( λ(a : Either t (NonEmptyList t)) →
+                      λ(b : Either t (NonEmptyList t)) →
+                        merge
+                          { Left = λ(_ : t) → b
+                          , Right =
+                              λ(x : NonEmptyList t) →
+                                Et.Right
+                                  ( merge
+                                      { Left = λ(_ : t) → x
+                                      , Right =
+                                          λ(y : NonEmptyList t) →
+                                            { head = x.head
+                                            , tail =
+                                                x.tail # [ y.head ] # y.tail
+                                            }
+                                      }
+                                      b
+                                  )
+                          }
+                          a
+                    )
+                    extractList
+              , ListBuild = NOP {} E.ListBuild
+              , ListFold = NOP {} E.ListFold
+              , ListLength = NOP {} E.ListLength
+              , ListHead = NOP {} E.ListHead
+              , ListLast = NOP {} E.ListLast
+              , ListReverse = NOP {} E.ListReverse
+              , Optional/Type = NOP {} E.Optional/Type
+              , Optional/Lit = NOP (Either t t) E.Optional/Lit
+              , OptionalFold = NOP {} E.OptionalFold
+              , OptionalBuild = NOP {} E.OptionalBuild
+              , Record/Type = NOP (List { name : Text, type : t }) E.Record/Type
+              , Record/Lit = NOP (List { name : Text, value : t }) E.Record/Lit
+              , Union/Type = NOP (List { name : Text, type : t }) E.Union/Type
+              , Union/Lit =
+                  NOP
+                    { name : Text
+                    , value : t
+                    , type : List { name : Text, type : t }
+                    }
+                    E.Union/Lit
+              , Combine =
+                  applyOperator
+                    E.Combine
+                    (List { name : Text, value : t })
+                    E.Record/Lit
+                    ( λ(a : List { name : Text, value : t }) →
+                      λ(b : List { name : Text, value : t }) →
+                        a # b
+                    )
+                    extractRecord
+              , CombineTypes =
+                  applyOperator
+                    E.CombineTypes
+                    (List { name : Text, type : t })
+                    E.Record/Type
+                    ( λ(a : List { name : Text, type : t }) →
+                      λ(b : List { name : Text, type : t }) →
+                        a # b
+                    )
+                    extractRecordType
+              , Prefer =
+                  applyOperator
+                    E.Prefer
+                    (List { name : Text, value : t })
+                    E.Record/Lit
+                    ( λ(a : List { name : Text, value : t }) →
+                      λ(b : List { name : Text, value : t }) →
+                        a # b
+                    )
+                    extractRecord
+              , Merge =
+                  NOP { handlers : t, union : t, type : Optional t } E.Merge
+              , Constructors =
+                  λ(args : t) →
+                    P.Optional.fold
+                      (List { name : Text, type : t })
+                      (extractUnionType args)
+                      t
+                      ( λ(list : List { name : Text, type : t }) →
+                          steppable.embed
+                            ( E.Record/Lit
+                                ( List/map
+                                    { name : Text, type : t }
+                                    { name : Text, value : t }
+                                    ( λ(entry : { name : Text, type : t }) →
+                                        { name = entry.name
+                                        , value =
+                                            steppable.embed
+                                              ( E.Lam
+                                                  { name = "_"
+                                                  , input = entry.type
+                                                  , output =
+                                                      steppable.embed
+                                                        ( E.Union/Lit
+                                                            { name = entry.name
+                                                            , value =
+                                                                steppable.embed
+                                                                  ( E.Var
+                                                                      { name =
+                                                                          "_"
+                                                                      , index =
+                                                                          0
+                                                                      }
+                                                                  )
+                                                            , type = list
+                                                            }
+                                                        )
+                                                  }
+                                              )
+                                        }
+                                    )
+                                    list
+                                )
+                            )
+                      )
+                      (NOP t E.Constructors args)
+              , Field =
+                  λ(args : { structure : t, name : Text }) →
+                    P.Optional.fold
+                      (List { name : Text, value : t })
+                      (extractRecord args.structure)
+                      t
+                      ( λ(_ : List { name : Text, value : t }) →
+                          NOP { structure : t, name : Text } E.Field args
+                      )
+                      (NOP { structure : t, name : Text } E.Field args)
+              , Project =
+                  λ(args : { structure : t, names : List Text }) →
+                    P.Optional.fold
+                      (List { name : Text, value : t })
+                      (extractRecord args.structure)
+                      t
+                      ( λ(rec : List { name : Text, value : t }) →
+                          NOP (List { name : Text, value : t }) E.Record/Lit rec
+                      )
+                      (NOP { structure : t, names : List Text } E.Project args)
+              , ImportAlt =
+                  λ(import : { primary : t, fallback : t }) → import.primary
+              , Embed = NOP a E.Embed
+              }
+              expr

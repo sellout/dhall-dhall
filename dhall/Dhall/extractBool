@@ -1,148 +1,94 @@
-    let Steppable =
-          ./../../dada/Steppable/Type Type ./../../dhall-bhat/Function/Type
+let B =
+      https://sellout.github.io/dhall-bhat/package.dhall
+        sha256:67617847fca913d17863ad857224cd9b3904297bb15a9674146d5e120c5ff08a
 
-in  let Either =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/Either/Type
+let D =
+      https://sellout.github.io/dada/package.dhall
+        sha256:bb4dc73fa86a3b05014e4c91aff598b81535ea54efc8692151af5f68667c78d9
 
-in  let NonEmptyList =
-          https://raw.githubusercontent.com/FormationAI/dhall-bhat/6f66fc588c9d49a662794a32b29962341c373eb4/NonEmptyList/Type
+let Steppable = D.Steppable.Type
 
-in    λ(t : Type)
-    → λ(a : Type)
-    → λ(steppable : Steppable t (./Type a))
-    → λ(expr : t)
-    → merge
-      { Const =
-          λ(_ : ./Const) → None Bool
-      , Var =
-          λ(_ : ./Var) → None Bool
-      , Lam =
-          λ(_ : { name : Text, input : t, output : t }) → None Bool
-      , Pi =
-          λ(_ : { name : Text, input : t, output : t }) → None Bool
-      , App =
-          λ(_ : { function : t, argument : t }) → None Bool
-      , Let =
-            λ(_ : { name : Text, type : Optional t, binding : t, body : t })
-          → None Bool
-      , Annot =
-          λ(_ : { term : t, type : t }) → None Bool
-      , Bool/Type =
-          λ(_ : {}) → None Bool
-      , Bool/Lit =
-          λ(bool : Bool) → Some bool
-      , BoolAnd =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , BoolOr =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , BoolEq =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , BoolNe =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , BoolIf =
-          λ(_ : { condition : t, consequent : t, alternative : t }) → None Bool
-      , Natural/Type =
-          λ(_ : {}) → None Bool
-      , Natural/Lit =
-          λ(_ : Natural) → None Bool
-      , NaturalFold =
-          λ(_ : {}) → None Bool
-      , NaturalBuild =
-          λ(_ : {}) → None Bool
-      , NaturalIsZero =
-          λ(_ : {}) → None Bool
-      , NaturalEven =
-          λ(_ : {}) → None Bool
-      , NaturalOdd =
-          λ(_ : {}) → None Bool
-      , NaturalToInteger =
-          λ(_ : {}) → None Bool
-      , NaturalShow =
-          λ(_ : {}) → None Bool
-      , NaturalPlus =
-          λ(args : { _1 : t, _2 : t }) → None Bool
-      , NaturalTimes =
-          λ(args : { _1 : t, _2 : t }) → None Bool
-      , Integer/Type =
-          λ(_ : {}) → None Bool
-      , Integer/Lit =
-          λ(_ : Integer) → None Bool
-      , IntegerShow =
-          λ(_ : {}) → None Bool
-      , IntegerToDouble =
-          λ(_ : {}) → None Bool
-      , Double/Type =
-          λ(_ : {}) → None Bool
-      , Double/Lit =
-          λ(_ : Double) → None Bool
-      , DoubleShow =
-          λ(_ : {}) → None Bool
-      , Text/Type =
-          λ(_ : {}) → None Bool
-      , Text/Lit =
-          λ(_ : Text) → None Bool
-      , TextAppend =
-          λ(args : { _1 : t, _2 : t }) → None Bool
-      , List/Type =
-          λ(_ : {}) → None Bool
-      , List/Lit =
-          λ(_ : Either t (NonEmptyList t)) → None Bool
-      , ListAppend =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , ListBuild =
-          λ(_ : {}) → None Bool
-      , ListFold =
-          λ(_ : {}) → None Bool
-      , ListLength =
-          λ(_ : {}) → None Bool
-      , ListHead =
-          λ(_ : {}) → None Bool
-      , ListLast =
-          λ(_ : {}) → None Bool
-      , ListReverse =
-          λ(_ : {}) → None Bool
-      , Optional/Type =
-          λ(_ : {}) → None Bool
-      , Optional/Lit =
-          λ(_ : Either t t) → None Bool
-      , OptionalFold =
-          λ(_ : {}) → None Bool
-      , OptionalBuild =
-          λ(_ : {}) → None Bool
-      , Record/Type =
-          λ(_ : List { name : Text, type : t }) → None Bool
-      , Record/Lit =
-          λ(_ : List { name : Text, value : t }) → None Bool
-      , Union/Type =
-          λ(_ : List { name : Text, type : t }) → None Bool
-      , Union/Lit =
+let Either = B.Either.Type
+
+let NonEmptyList = B.NonEmptyList.Type
+
+in  λ(t : Type) →
+    λ(a : Type) →
+    λ(steppable : Steppable t (./Type a)) →
+    λ(expr : t) →
+      merge
+        { Const = λ(_ : ./Const) → None Bool
+        , Var = λ(_ : ./Var) → None Bool
+        , Lam = λ(_ : { name : Text, input : t, output : t }) → None Bool
+        , Pi = λ(_ : { name : Text, input : t, output : t }) → None Bool
+        , App = λ(_ : { function : t, argument : t }) → None Bool
+        , Let =
+            λ(_ : { name : Text, type : Optional t, binding : t, body : t }) →
+              None Bool
+        , Annot = λ(_ : { term : t, type : t }) → None Bool
+        , Bool/Type = λ(_ : {}) → None Bool
+        , Bool/Lit = λ(bool : Bool) → Some bool
+        , BoolAnd = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , BoolOr = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , BoolEq = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , BoolNe = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , BoolIf =
+            λ(_ : { condition : t, consequent : t, alternative : t }) →
+              None Bool
+        , Natural/Type = λ(_ : {}) → None Bool
+        , Natural/Lit = λ(_ : Natural) → None Bool
+        , NaturalFold = λ(_ : {}) → None Bool
+        , NaturalBuild = λ(_ : {}) → None Bool
+        , NaturalIsZero = λ(_ : {}) → None Bool
+        , NaturalEven = λ(_ : {}) → None Bool
+        , NaturalOdd = λ(_ : {}) → None Bool
+        , NaturalToInteger = λ(_ : {}) → None Bool
+        , NaturalShow = λ(_ : {}) → None Bool
+        , NaturalPlus = λ(args : { _1 : t, _2 : t }) → None Bool
+        , NaturalTimes = λ(args : { _1 : t, _2 : t }) → None Bool
+        , Integer/Type = λ(_ : {}) → None Bool
+        , Integer/Lit = λ(_ : Integer) → None Bool
+        , IntegerShow = λ(_ : {}) → None Bool
+        , IntegerToDouble = λ(_ : {}) → None Bool
+        , Double/Type = λ(_ : {}) → None Bool
+        , Double/Lit = λ(_ : Double) → None Bool
+        , DoubleShow = λ(_ : {}) → None Bool
+        , Text/Type = λ(_ : {}) → None Bool
+        , Text/Lit = λ(_ : Text) → None Bool
+        , TextAppend = λ(args : { _1 : t, _2 : t }) → None Bool
+        , List/Type = λ(_ : {}) → None Bool
+        , List/Lit = λ(_ : Either t (NonEmptyList t)) → None Bool
+        , ListAppend = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , ListBuild = λ(_ : {}) → None Bool
+        , ListFold = λ(_ : {}) → None Bool
+        , ListLength = λ(_ : {}) → None Bool
+        , ListHead = λ(_ : {}) → None Bool
+        , ListLast = λ(_ : {}) → None Bool
+        , ListReverse = λ(_ : {}) → None Bool
+        , Optional/Type = λ(_ : {}) → None Bool
+        , Optional/Lit = λ(_ : Either t t) → None Bool
+        , OptionalFold = λ(_ : {}) → None Bool
+        , OptionalBuild = λ(_ : {}) → None Bool
+        , Record/Type = λ(_ : List { name : Text, type : t }) → None Bool
+        , Record/Lit = λ(_ : List { name : Text, value : t }) → None Bool
+        , Union/Type = λ(_ : List { name : Text, type : t }) → None Bool
+        , Union/Lit =
             λ ( _
-              : { name :
-                    Text
-                , value :
-                    t
-                , type :
-                    List { name : Text, type : t }
+              : { name : Text
+                , value : t
+                , type : List { name : Text, type : t }
                 }
-              )
-          → None Bool
-      , Combine =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , CombineTypes =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , Prefer =
-          λ(_ : { _1 : t, _2 : t }) → None Bool
-      , Merge =
-          λ(_ : { handlers : t, union : t, type : Optional t }) → None Bool
-      , Constructors =
-          λ(_ : t) → None Bool
-      , Field =
-          λ(_ : { structure : t, name : Text }) → None Bool
-      , Project =
-          λ(_ : { structure : t, names : List Text }) → None Bool
-      , ImportAlt =
-          λ(_ : { primary : t, fallback : t }) → None Bool
-      , Embed =
-          λ(_ : a) → None Bool
-      }
-      (steppable.project expr)
+              ) →
+              None Bool
+        , Combine = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , CombineTypes = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , Prefer = λ(_ : { _1 : t, _2 : t }) → None Bool
+        , Merge =
+            λ(_ : { handlers : t, union : t, type : Optional t }) → None Bool
+        , Constructors = λ(_ : t) → None Bool
+        , Field = λ(_ : { structure : t, name : Text }) → None Bool
+        , Project = λ(_ : { structure : t, names : List Text }) → None Bool
+        , ImportAlt = λ(_ : { primary : t, fallback : t }) → None Bool
+        , Embed = λ(_ : a) → None Bool
+        }
+        (steppable.project expr)

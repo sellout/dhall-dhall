@@ -1,14 +1,15 @@
-    let C = constructors ./Const
+let B =
+      https://sellout.github.io/dhall-bhat/package.dhall
+        sha256:67617847fca913d17863ad857224cd9b3904297bb15a9674146d5e120c5ff08a
 
-in  let E = constructors ./../../dhall-bhat/Either/Type Text ./Const
+let C = ./Const
 
-in    λ(const : ./Const)
-    → merge
-      { TypeC =
-          λ(_ : {}) → E.Right (C.KindC {})
-      , KindC =
-          λ(_ : {}) → E.Right (C.SortC {})
-      , SortC =
-          λ(_ : {}) → E.Left "Sort has no type."
-      }
-      const
+let E = B.Either.Type Text C
+
+in  λ(const : C) →
+      merge
+        { TypeC = λ(_ : {}) → E.Right (C.KindC {=})
+        , KindC = λ(_ : {}) → E.Right (C.SortC {=})
+        , SortC = λ(_ : {}) → E.Left "Sort has no type."
+        }
+        const
