@@ -1,3 +1,4 @@
+/dhall/** linguist-language=Dhall
 /.cache/vale/Vocab/base/accept.txt linguist-generated
 /.cache/vale/Vocab/dhall-dhall/accept.txt linguist-generated
 /.editorconfig linguist-generated
