@@ -1,4 +1,5 @@
-{- The Dhall AST.
+{-|
+   The Dhall AST.
 
    Differences from Haskell:
 -  no `Note` node (use `EnvT` instead)

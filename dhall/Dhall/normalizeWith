@@ -1,4 +1,5 @@
-{- FIXME:
+{-|
+   FIXME:
 -  TODOs
 - `Combine`, `CombineTypes`, and `Prefer` all currently just list concatenation.
 - `App`, `Let`, and `Merge` need actual implementations.
