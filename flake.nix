@@ -161,7 +161,7 @@
       url = "github:sellout/flaky";
     };
 
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
 
     project-manager = {
       inputs = {
