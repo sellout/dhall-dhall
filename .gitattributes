@@ -1,12 +1,15 @@
 /dhall/** linguist-language=Dhall
-/.cache/vale/Vocab/base/accept.txt linguist-generated
+/.cache/git/config linguist-generated
+/.cache/git/hooks/pre-push linguist-generated
 /.cache/vale/Vocab/dhall-dhall/accept.txt linguist-generated
+/.dir-locals.el linguist-generated
 /.editorconfig linguist-generated
 /.envrc linguist-generated
 /.gitattributes linguist-generated
+/.github/renovate.json linguist-generated
 /.github/settings.yml linguist-generated
 /.github/workflows/pages.yml linguist-generated
+/.gitignore linguist-generated
 /.vale.ini linguist-generated
 /.github/workflows/flakehub-publish.yml linguist-generated
 /garnix.yaml linguist-generated
-/renovate.json linguist-generated

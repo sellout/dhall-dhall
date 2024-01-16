@@ -4,27 +4,27 @@ let B =
 
 let C = ./Const
 
-in  let E = B.Either.Type Text ./Const
+let E = B.Either.Type Text ./Const
 
-    in  λ(a : ./Const) →
-        λ(b : ./Const) →
-          merge
-            { TypeC = λ(x : {}) → E.Right (C.TypeC {=})
-            , KindC =
-                λ(_ : {}) →
-                  merge
-                    { TypeC = λ(x : {}) → E.Left "No dependent types."
-                    , KindC = λ(x : {}) → E.Right (C.KindC {=})
-                    , SortC = λ(x : {}) → E.Right (C.SortC {=})
-                    }
-                    a
-            , SortC =
-                λ(_ : {}) →
-                  merge
-                    { TypeC = λ(x : {}) → E.Left "No dependent types."
-                    , KindC = λ(x : {}) → E.Left "No dependent types."
-                    , SortC = λ(x : {}) → E.Right (C.SortC {=})
-                    }
-                    a
-            }
-            b
+in  λ(a : ./Const) →
+    λ(b : ./Const) →
+      merge
+        { TypeC = λ(x : {}) → E.Right (C.TypeC {=})
+        , KindC =
+            λ(_ : {}) →
+              merge
+                { TypeC = λ(x : {}) → E.Left "No dependent types."
+                , KindC = λ(x : {}) → E.Right (C.KindC {=})
+                , SortC = λ(x : {}) → E.Right (C.SortC {=})
+                }
+                a
+        , SortC =
+            λ(_ : {}) →
+              merge
+                { TypeC = λ(x : {}) → E.Left "No dependent types."
+                , KindC = λ(x : {}) → E.Left "No dependent types."
+                , SortC = λ(x : {}) → E.Right (C.SortC {=})
+                }
+                a
+        }
+        b
