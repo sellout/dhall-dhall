@@ -1,7 +1,19 @@
-{config, flaky, lib, ...}: {
+{
+  config,
+  flaky,
+  lib,
+  pkgs,
+  ...
+}: {
   project = {
     name = "dhall-dhall";
     summary = "Implementation of Dhall in Dhall";
+
+    devPackages = [
+      pkgs.dhall
+      pkgs.dhall-docs
+      pkgs.dhall-lsp-server
+    ];
   };
 
   ## dependency managerment
@@ -31,7 +43,6 @@
     };
     vale = {
       enable = true;
-      coreSettings.Vocab = "dhall-dhall";
       excludes = [
         "./.config/emacs/.dir-locals.el"
         "./.gitattributes"
@@ -41,7 +52,7 @@
         "./dhall/*"
         "./garnix.yaml"
       ];
-      vocab.dhall-dhall.accept = config.programs.vale.vocab.base.accept ++ [
+      vocab.${config.project.name}.accept = [
         "Dhall"
       ];
     };
@@ -60,14 +71,14 @@
   ##        Need to improve module merging.
   services.github.settings.branches.main.protection.required_status_checks.contexts =
     lib.mkForce
-      (lib.concatMap flaky.lib.garnixChecks [
-        (sys: "homeConfig ${sys}-${config.project.name}-example")
-        (sys: "package default [${sys}]")
-        (sys: "package ${config.project.name} [${sys}]")
-        ## FIXME: These are duplicated from the base config
-        (sys: "check formatter [${sys}]")
-        (sys: "devShell default [${sys}]")
-      ]);
+    (lib.concatMap flaky.lib.garnixChecks [
+      (sys: "homeConfig ${sys}-${config.project.name}-example")
+      (sys: "package default [${sys}]")
+      (sys: "package ${config.project.name} [${sys}]")
+      ## FIXME: These are duplicated from the base config
+      (sys: "check formatter [${sys}]")
+      (sys: "devShell default [${sys}]")
+    ]);
 
   ## publishing
   imports = [./github-pages.nix];

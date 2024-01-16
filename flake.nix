@@ -26,7 +26,7 @@
     {
       schemas = {
         inherit
-          (inputs.project-manager.schemas)
+          (inputs.flaky.schemas)
           overlays
           homeConfigurations
           packages
@@ -94,21 +94,21 @@
         };
       };
 
-      devShells.default =
-        inputs.flaky.lib.devShells.default
-        pkgs
-        inputs.self
-        [
-          pkgs.dhall
-          pkgs.dhall-docs
-          pkgs.dhall-lsp-server
-        ]
-        "";
-
       projectConfigurations = inputs.flaky.lib.projectConfigurations.default {
         inherit pkgs;
         inherit (inputs) self;
       };
+
+      devShells =
+        {
+          default =
+            inputs.flaky.lib.devShells.default
+            system
+            inputs.self
+            []
+            "";
+        }
+        // inputs.self.projectConfigurations.${system}.devShells;
 
       checks = inputs.self.projectConfigurations.${system}.checks;
 
@@ -116,18 +116,10 @@
     });
 
   inputs = {
-    bash-strict-mode = {
-      inputs = {
-        project-manager.follows = "project-manager";
-        flaky.follows = "flaky";
-        nixpkgs.follows = "nixpkgs";
-      };
-      url = "github:sellout/bash-strict-mode";
-    };
-
     caterwaul = {
       inputs = {
-        bash-strict-mode.follows = "bash-strict-mode";
+        flake-utils.follows = "flake-utils";
+        flaky.follows = "flaky";
         nixpkgs.follows = "nixpkgs";
       };
       url = "github:sellout/caterwaul";
@@ -135,8 +127,9 @@
 
     dada = {
       inputs = {
-        bash-strict-mode.follows = "bash-strict-mode";
         dhall-bhat.follows = "dhall-bhat";
+        flake-utils.follows = "flake-utils";
+        flaky.follows = "flaky";
         nixpkgs.follows = "nixpkgs";
       };
       url = "github:sellout/dada";
@@ -144,7 +137,8 @@
 
     dhall-bhat = {
       inputs = {
-        bash-strict-mode.follows = "bash-strict-mode";
+        flake-utils.follows = "flake-utils";
+        flaky.follows = "flaky";
         nixpkgs.follows = "nixpkgs";
       };
       url = "github:sellout/dhall-bhat";
@@ -154,22 +148,12 @@
 
     flaky = {
       inputs = {
-        bash-strict-mode.follows = "bash-strict-mode";
-        project-manager.follows = "project-manager";
+        flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
       };
       url = "github:sellout/flaky";
     };
 
     nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
-
-    project-manager = {
-      inputs = {
-        bash-strict-mode.follows = "bash-strict-mode";
-        flaky.follows = "flaky";
-        nixpkgs.follows = "nixpkgs";
-      };
-      url = "github:sellout/project-manager";
-    };
   };
 }

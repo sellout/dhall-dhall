@@ -1,5 +1,0 @@
-direnv
-garnix
-[Nn]ix
-Pfeil
-ShellCheck
